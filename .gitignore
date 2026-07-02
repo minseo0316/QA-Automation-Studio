@@ -1,0 +1,21 @@
+bin/
+obj/
+TestResults/
+History/
+Result/
+PICTH/
+*.user
+*.suo
+*.userprefs
+*.cache
+*.log
+config.json
+Unity_QA_Log.txt
+QA_Final_Report.txt
+Result.xml
+.vs/
+*.pdb
+*.mdb
+
+# Accidental nested repository created by GitHub tooling
+QA Automation Studio/
