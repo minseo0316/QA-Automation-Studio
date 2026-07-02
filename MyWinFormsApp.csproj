@@ -3,6 +3,10 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>
+    <AssemblyName>QA-Automation-Studio</AssemblyName>
+    <Product>QA Automation Studio</Product>
+    <Title>QA Automation Studio</Title>
+    <Description>Unity PlayMode test automation, evidence capture, and reporting studio.</Description>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -10,6 +14,11 @@
 
   <ItemGroup>
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="UnityTestKit\**\*.cs" />
+    <None Include="UnityTestKit\**\*" />
   </ItemGroup>
 
 </Project>

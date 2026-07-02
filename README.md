@@ -1,66 +1,94 @@
-# MyWinFormsApp
+# QA Automation Studio
 
-Unity PlayMode 테스트를 실행하고, 결과를 사람이 바로 읽을 수 있게 묶어주는 QA 자동화 도구입니다.
+Unity PlayMode 테스트를 백그라운드에서 실행하고, 실패 순간의 게임 화면과 로그를 자동으로 수집해 HTML 및 Discord 보고서로 전달하는 Windows QA 도구입니다.
 
-## 핵심 기능
+## 주요 기능
 
-- Unity Editor를 외부 프로세스로 실행해 PlayMode 테스트 수행
-- 실패 시 게임 화면 스크린샷 저장
-- 연속 프레임을 모아 짧은 GIF 증거 생성
-- HTML 보고서와 텍스트 리포트 자동 생성
-- Discord Webhook으로 스크린샷, GIF, HTML 보고서 전송
-- 자동 모니터링 모드 지원
-- 테스트 실패 시 소스 위치와 오류 메시지 정리
-- WinForms 기반의 대시보드 UI 제공
+- Unity Editor를 별도 프로세스로 실행해 PlayMode 테스트 자동 수행
+- 실패 시 실제 카메라 화면 PNG 캡처 및 중복 파일 보존
+- 연속 프레임 기반 GIF 증거와 HTML 상세 보고서 생성
+- 테스트명, 오류 내용, 소스 위치를 읽기 쉬운 결함 내역으로 정리
+- PNG, GIF, HTML을 Discord Webhook으로 전송
+- 일정 간격으로 반복 검사하는 자동 모니터링 모드
+- 실행 기록과 증거 파일 히스토리 관리
 
-## 실행 전 준비
-
-1. Unity Editor 경로를 설정합니다.
-2. Unity 프로젝트 경로를 설정합니다.
-3. 결과 저장 폴더를 지정합니다.
-4. Discord Webhook URL을 입력합니다.
-
-설정은 실행 파일 옆의 `config.json`에 저장됩니다. 저장소에는 포함하지 않는 구성을 권장합니다.
-
-## 실행 방법
-
-1. Visual Studio에서 `MyWinFormsApp`를 실행합니다.
-2. 좌측 설정 패널에서 경로와 웹훅을 입력합니다.
-3. `설정 저장`을 누릅니다.
-4. `QA 테스트 시작` 또는 `자동 모니터링 시작`을 사용합니다.
-
-## 결과물
-
-- `Result.xml`: Unity 테스트 결과 XML
-- `Unity_QA_Log.txt`: Unity 실행 로그
-- `QA_Final_Report.txt`: 최종 텍스트 보고서
-- `QA_Report_*.html`: 웹 브라우저용 상세 보고서
-- `QA_Evidence_*.gif`: 짧은 시각 증거
-- `Bug_Screenshot*.png`: 스크린샷 증거
-
-## 폴더 구조
+## 구성
 
 ```text
-MyWinFormsApp/
-  Controls/
-  Form1.cs
-  PathManager.cs
-  QaEvidenceBuilder.cs
-  QATestLauncher.cs
-  SettingsForm.cs
-  UiTheme.cs
-  config.sample.json
-  README.md
+QA-Automation-Studio/
+  Controls/                  WinForms UI 컴포넌트
+  UnityTestKit/              Unity 프로젝트에 설치할 테스트 코드
+    Assets/Tests/
+  .github/workflows/         Windows 실행 패키지 자동 빌드
+  Form1.cs                   테스트 실행 및 결과 표시
+  QaEvidenceBuilder.cs       GIF 및 HTML 증거 생성
+  PathManager.cs             로컬 설정 관리
+  build-release.ps1          배포용 ZIP 생성
+  config.sample.json         설정 예시
 ```
 
-## 포폴 포인트
+## 빠른 시작
 
-- 실제 Unity 테스트를 구동하는 자동화 흐름
-- 실패 화면을 증거로 남기는 QA 방식
-- Discord 전송까지 이어지는 배포형 워크플로우
-- 자동 모니터링과 수동 실행을 모두 다루는 운영성
+### 1. Unity 테스트 키트 설치
 
-## 주의 사항
+`UnityTestKit/Assets/Tests` 폴더를 대상 Unity 프로젝트의 `Assets/Tests`에 복사합니다. 자세한 의존성과 수정 지점은 [UnityTestKit 사용법](UnityTestKit/README.md)을 확인하세요.
 
-- `config.json`에는 개인 웹훅이나 로컬 경로가 들어갈 수 있으니 저장소에 올리지 않습니다.
-- `bin/`, `obj/`, `TestResults/`는 빌드 산출물이라 GitHub에는 포함하지 않는 편이 좋습니다.
+Unity 프로젝트에는 Test Framework 패키지가 필요합니다.
+
+```json
+"com.unity.test-framework": "1.4.6"
+```
+
+### 2. 앱 설정
+
+앱에서 다음 값을 지정하고 저장합니다.
+
+1. `Unity.exe` 경로
+2. 테스트할 Unity 프로젝트 루트
+3. 결과 저장 폴더
+4. Discord Webhook URL
+5. 자동 모니터링용 Webhook URL
+
+설정은 실행 파일 옆의 `config.json`에 저장됩니다. 실제 Webhook과 개인 경로가 포함되므로 Git에 커밋하지 않습니다.
+
+### 3. 테스트 실행
+
+`QA 테스트 시작`을 누르면 Unity PlayMode 테스트가 백그라운드에서 실행됩니다. 반복 검사가 필요하면 간격을 지정하고 `자동 모니터링 시작`을 누릅니다.
+
+실행 결과로 다음 파일이 생성됩니다.
+
+- `Result.xml`: Unity Test Runner 원본 결과
+- `Unity_QA_Log.txt`: Unity 실행 로그
+- `QA_Final_Report.txt`: 텍스트 결함 보고서
+- `QA_Report_*.html`: 브라우저용 상세 보고서
+- `QA_Evidence_*.gif`: 실패 전후 프레임 증거
+- `Bug_Screenshot*.png`: 실패 순간 카메라 캡처
+
+## 실행 파일 만들기
+
+.NET SDK가 설치된 Windows PowerShell에서 실행합니다.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\build-release.ps1
+```
+
+`dist/QA-Automation-Studio-win-x64.zip`이 생성됩니다. ZIP에는 .NET 런타임을 포함한 단일 실행 파일과 설정 예시가 들어갑니다.
+
+GitHub의 `Actions > Build Windows Release > Run workflow`에서도 같은 ZIP을 만들 수 있습니다. 배포 파일은 저장소 최상위에 커밋하지 않고 GitHub Releases 또는 Actions Artifacts에 첨부하는 방식을 권장합니다.
+
+## 직접 개발 실행
+
+```powershell
+dotnet restore
+dotnet run --project MyWinFormsApp.csproj
+```
+
+## 보안
+
+- `config.json`, 테스트 결과, 빌드 산출물은 `.gitignore`로 제외됩니다.
+- 실제 Discord Webhook URL을 코드나 README에 기록하지 않습니다.
+- SSL 인증서 검증을 비활성화하지 않습니다.
+
+## 포트폴리오 포인트
+
+이 프로젝트는 테스트 실행에 그치지 않고 실패 재현, 시각 증거 수집, 소스 위치 추적, 보고서 생성, Discord 전달, 반복 모니터링까지 하나의 QA 파이프라인으로 연결합니다. `UnityTestKit`에는 실제 Knight Shift 프로젝트에서 사용한 결함 재현 테스트가 포함되어 있어 적용 사례도 함께 확인할 수 있습니다.

@@ -19,3 +19,5 @@ Result.xml
 
 # Accidental nested repository created by GitHub tooling
 QA Automation Studio/
+dist/
+publish/

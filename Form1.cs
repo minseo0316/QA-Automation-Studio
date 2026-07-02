@@ -721,7 +721,7 @@ ReturnBestMatch:
 	{
 		base.Size = new Size(1280, 820);
 		MinimumSize = new Size(1120, 760);
-		Text = "Knight Shift | QA Console";
+		Text = "QA Automation Studio";
 		base.StartPosition = FormStartPosition.CenterScreen;
 		BackColor = UiTheme.Background;
 		Panel leftPanel = new Panel

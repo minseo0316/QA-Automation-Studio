@@ -16,8 +16,9 @@ class QATestLauncher
             return;
         }
         
-        string reportPath = @"C:\AutoTesting\MyWinFormsApp\Result.xml"; 
-        string logPath = @"C:\AutoTesting\MyWinFormsApp\Unity_QA_Log.txt";
+        Directory.CreateDirectory(PathManager.OutputDirectory);
+        string reportPath = Path.Combine(PathManager.OutputDirectory, "Result.xml");
+        string logPath = Path.Combine(PathManager.OutputDirectory, "Unity_QA_Log.txt");
 
         Directory.CreateDirectory(Path.GetDirectoryName(reportPath));
         
