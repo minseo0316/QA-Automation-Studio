@@ -570,6 +570,7 @@ ReturnBestMatch:
 		PathManager.ScreenshotDirectory = txtScreenshotPath.Text;
 		PathManager.AutoModeDiscordWebhookUrl = txtAutoModeDiscordWebhookUrl.Text;
 		PathManager.SaveSettings();
+		SetupRuntimeEvidenceWatcher();
 		MessageBox.Show("경로 설정이 저장되었습니다.", "저장 완료", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
 	}
 
@@ -697,6 +698,7 @@ ReturnBestMatch:
 	protected override void OnFormClosing(FormClosingEventArgs e)
 	{
 		logFileWatcher?.Dispose();
+		runtimeEvidenceWatcher?.Dispose();
 		copyNotificationTimer?.Dispose();
 		autoModeTimer?.Dispose();
 		picScreenshot?.Image?.Dispose();
@@ -1029,6 +1031,7 @@ ReturnBestMatch:
 		LoadSettingsToUI();
 		LoadHistoryFiles();
 		SetupLogFileWatcher();
+		SetupRuntimeEvidenceWatcher();
 		progressTimer = new System.Windows.Forms.Timer
 		{
 			Interval = 200

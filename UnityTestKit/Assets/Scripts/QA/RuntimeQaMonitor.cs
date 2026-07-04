@@ -164,6 +164,12 @@ public sealed class RuntimeQaMonitor : MonoBehaviour
 
     private static Texture2D CaptureCameraFrame()
     {
+        // Interactive capture includes Screen Space UI and the complete HUD.
+        if (!Application.isBatchMode)
+        {
+            return ScreenCapture.CaptureScreenshotAsTexture();
+        }
+
         Camera camera = Camera.main != null ? Camera.main : FindFirstObjectByType<Camera>();
         if (camera == null) return ScreenCapture.CaptureScreenshotAsTexture();
 
@@ -240,4 +246,3 @@ public sealed class RuntimeQaMonitor : MonoBehaviour
         public string screenshotPath;
     }
 }
-

@@ -64,6 +64,12 @@ Unity 프로젝트에는 Test Framework 패키지가 필요합니다.
 - `QA_Evidence_*.gif`: 실패 전후 프레임 증거
 - `Bug_Screenshot*.png`: 실패 순간 카메라 캡처
 
+### 일반 Play 실시간 감시
+
+QA Automation Studio와 Unity Editor를 함께 실행해도 됩니다. 프로그램은 Unity 프로젝트의 `TestResults/RuntimeMonitoring` 폴더를 감시하며, 일반 Play 중 새 런타임 결함이 기록되면 HUD가 포함된 PNG와 JSON 오류 정보를 자동 모드 Discord Webhook으로 즉시 전송합니다. 자동 모드 Webhook이 비어 있으면 일반 Webhook을 사용합니다.
+
+이때 `QA 테스트 시작` 버튼은 누르지 않습니다. 백그라운드 PlayMode 테스트는 동일 프로젝트를 별도 Unity 프로세스로 열기 때문에 Unity Editor를 닫은 상태에서 실행해야 합니다.
+
 ## 실행 파일 만들기
 
 .NET SDK가 설치된 Windows PowerShell에서 실행합니다.

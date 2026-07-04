@@ -52,7 +52,7 @@ public sealed class RuntimeQaDemoTrigger : MonoBehaviour
         GameObject enemy = FindEnemyObject();
         if (enemy == null)
         {
-            Debug.LogError("[QA Demo] F9 failed: no supported enemy object was found in the active scene.");
+            Debug.LogError("[QA Demo] F9 requires a battle scene: no supported enemy was found in the active scene.");
             return;
         }
 
@@ -81,4 +81,3 @@ public sealed class RuntimeQaDemoTrigger : MonoBehaviour
         throw new InvalidOperationException("[QA Demo] Simulated runtime exception for evidence capture.");
     }
 }
-
