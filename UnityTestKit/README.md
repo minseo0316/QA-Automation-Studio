@@ -12,6 +12,7 @@
 
 ## 파일 역할
 
+- `RuntimeQaMonitor.cs`: 일반 Play 중 예외 로그, 카메라 비활성, 필수 오브젝트 누락, 비정상 Transform을 감지하고 PNG와 JSON 증거를 저장합니다.
 - `QaScreenshotCapture.cs`: 실패한 테스트의 카메라 화면을 PNG로 저장합니다. 배치 모드에서는 RenderTexture 기반 캡처로 전환합니다.
 - `QaFrameRecorder.cs`: 테스트 카메라에서 연속 프레임을 저장해 GIF 증거 생성을 지원합니다.
 - `QaSceneWatchdogTests.cs`: 카메라, 필수 오브젝트, 비정상 Transform을 자동 감시합니다.
@@ -54,3 +55,9 @@ public void TearDown()
 ```
 
 실제 게임 화면을 남기려면 테스트가 실행되는 씬에 활성화된 Camera가 있어야 합니다. 카메라가 없으면 캡처 모듈이 임시 카메라를 생성하지만, 이 경우 게임 장면 대신 단색 배경만 기록될 수 있습니다.
+
+## 일반 플레이 런타임 감시
+
+`RuntimeQaMonitor`는 Editor와 Development Build에서 Play가 시작되면 자동 생성됩니다. 모든 씬에 직접 추가할 필요는 없습니다. 수동 설정이 필요하면 빈 GameObject에 컴포넌트를 추가하고 `requiredObjectNames`에 반드시 존재해야 하는 오브젝트 이름을 등록합니다.
+
+감지 결과는 기본적으로 프로젝트의 `TestResults/RuntimeMonitoring`에 PNG와 JSON으로 저장됩니다. QA Automation Studio에서 실행한 경우에는 `-screenshotPath`가 가리키는 결과 폴더를 사용합니다.
