@@ -93,6 +93,19 @@ public partial class Form1 : Form
 
 	private async Task RunTestAsync(bool isAutoModeRun)
 	{
+		if (IsUnityProjectOpen())
+		{
+			string message = "Unity PlayMode 실시간 감시가 활성 상태입니다.\r\n"
+				+ "현재 실행 중인 Unity는 그대로 두고 F8/F9/F10을 사용하세요.\r\n"
+				+ "백그라운드 회귀 테스트는 Unity Editor를 닫은 뒤 실행할 수 있습니다.";
+			infoBadge.Visible = true;
+			infoBadge.BadgeText = "● Unity 실시간 런타임 감시 중";
+			reportTextBox.Text = message;
+			lblStatusNotice.Text = "Unity PlayMode 감시 중 · 새 결함은 Discord로 즉시 전송";
+			liveLogTextBox.AppendText($"{Environment.NewLine}[Runtime] 백그라운드 테스트 실행 차단: Unity 프로젝트가 열려 있습니다.");
+			return;
+		}
+
 		Directory.CreateDirectory(PathManager.OutputDirectory);
 		Directory.CreateDirectory(PathManager.ScreenshotDirectory);
 		string reportPath = PathManager.XmlReportPath;
@@ -163,6 +176,12 @@ public partial class Form1 : Form
 		}
 	}
 
+	private static bool IsUnityProjectOpen()
+	{
+		if (string.IsNullOrWhiteSpace(PathManager.UnityProjectPath)) return false;
+		return File.Exists(Path.Combine(PathManager.UnityProjectPath, "Temp", "UnityLockfile"));
+	}
+
 	private async Task ProcessAndWriteReports(string xmlPath, string logPath, string finalTxtReportPath, bool processSuccess, string screenshotPath, string frameDirectory, bool isAutoModeRun)
 	{
 		if (base.InvokeRequired)
@@ -196,7 +215,8 @@ public partial class Form1 : Form
 				}
 			}
 			reportTextBox.Text = errorMessage;
-			await SendDiscordNotificationAsync("0", "0", isSuccess: false, screenshotPath, null, null, isAutoModeRun);
+			liveLogTextBox.AppendText($"{Environment.NewLine}[QA] 결과 XML이 없어 Discord 결함 알림을 전송하지 않았습니다.");
+			runTestButton.Enabled = true;
 			return;
 		}
 		try
@@ -709,12 +729,12 @@ ReturnBestMatch:
 	{
 		if (isActive)
 		{
-			btnToggleAutoMode.Text = "■ 모니터링 중지";
+			btnToggleAutoMode.Text = "■ 정기 테스트 중지";
 			btnToggleAutoMode.AnimateTo(UiTheme.Error);
 		}
 		else
 		{
-			btnToggleAutoMode.Text = "▶ 자동 모니터링 시작";
+			btnToggleAutoMode.Text = "▶ 정기 자동 테스트";
 			btnToggleAutoMode.AnimateTo(UiTheme.Secondary);
 		}
 	}
@@ -796,7 +816,7 @@ ReturnBestMatch:
 		};
 		btnToggleAutoMode = new RoundedButton
 		{
-			Text = "▶ 자동 모니터링 시작",
+			Text = "▶ 정기 자동 테스트",
 			Location = new Point(0, 0),
 			Size = new Size(232, 38),
 			ButtonStyle = RoundedButtonStyle.Secondary,
