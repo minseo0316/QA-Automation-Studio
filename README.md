@@ -28,6 +28,11 @@ QA-Automation-Studio/
   config.sample.json         설정 예시
 ```
 
+## 📺 QA Automation Studio 구동 및 최적화 검증 영상
+*(아래 이미지를 클릭하면 자막이 포함된 전체 포트폴리오 영상으로 이동합니다.)*
+
+[![QA Automation Studio Video](Docs/Screenshots/optimized_hud.png)]((https://youtu.be/WsvE69Xakds))
+
 ## 빠른 시작
 
 ### 1. Unity 테스트 키트 설치
