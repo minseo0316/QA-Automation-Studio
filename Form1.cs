@@ -20,6 +20,8 @@ public partial class Form1 : Form
 {
 	private RoundedButton runTestButton = null;
 
+	private RoundedButton btnPerformanceAudit = null;
+
 	private NeonBadgePanel infoBadge = null;
 
 	private ModernProgressBar automationProgressBar = null;
@@ -996,6 +998,16 @@ ReturnBestMatch:
 			CornerRadius = 6
 		};
 		runTestButton.Click += button1_Click;
+		btnPerformanceAudit = new RoundedButton
+		{
+			Text = "성능 진단 실행",
+			Dock = DockStyle.Top,
+			Height = 40,
+			Margin = new Padding(0, 0, 0, 15),
+			ButtonStyle = RoundedButtonStyle.Secondary,
+			CornerRadius = 6
+		};
+		btnPerformanceAudit.Click += btnPerformanceAudit_Click;
 		Panel logContainer = new Panel
 		{
 			Dock = DockStyle.Fill,
@@ -1044,6 +1056,7 @@ ReturnBestMatch:
 		rightPanel.Controls.Add(logContainer);
 		rightPanel.Controls.Add(historyLabel);
 		rightPanel.Controls.Add(historyListBox);
+		rightPanel.Controls.Add(btnPerformanceAudit);
 		rightPanel.Controls.Add(runTestButton);
 		base.Controls.Add(centerPanel);
 		base.Controls.Add(rightPanel);

@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -95,12 +94,13 @@ public partial class Form1
 
         string sourceLocation = ResolveRuntimeSourceLocation(issue.stackTrace);
         infoBadge.Visible = true;
-        infoBadge.BadgeText = "❌ 실시간 런타임 결함 감지";
+        infoBadge.BadgeText = "실시간 런타임 결함 감지";
         lblTotalCount.Text = "TOTAL: 1";
+        lblPassedCount.Text = "PASSED: 0";
         lblFailedCount.Text = "FAILED: 1";
         reportTextBox.Text =
             $"실시간 런타임 결함{Environment.NewLine}{Environment.NewLine}" +
-            $"씬  {issue.scene}{Environment.NewLine}" +
+            $"씬    {issue.scene}{Environment.NewLine}" +
             $"분류  {issue.category}{Environment.NewLine}" +
             $"원인  {issue.message}{Environment.NewLine}" +
             $"위치  {sourceLocation}{Environment.NewLine}{Environment.NewLine}" +
